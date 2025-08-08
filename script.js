@@ -144,4 +144,48 @@ document.addEventListener('DOMContentLoaded', () => {
   setupShare();
   setupLightbox();
   setupTypewriter();
+  setupGift();
 });
+
+
+function burstEmojis(anchorEl, emojis=['💖','✨','🎉','🌟']) {
+  const rect = anchorEl.getBoundingClientRect();
+  for (let i = 0; i < 14; i++) {
+    const span = document.createElement('span');
+    span.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    span.style.position = 'fixed';
+    span.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*120) + 'px';
+    span.style.top = (rect.top + rect.height/2 + (Math.random()-0.5)*60) + 'px';
+    span.style.fontSize = (14 + Math.random()*18) + 'px';
+    span.style.opacity = '1';
+    span.style.transition = 'transform .9s ease, opacity 1s ease';
+    span.style.transform = 'translateY(0)';
+    span.style.pointerEvents = 'none';
+    document.body.appendChild(span);
+    requestAnimationFrame(() => {
+      span.style.transform = `translate(${(Math.random()-0.5)*80}px, -${70 + Math.random()*80}px)`;
+      span.style.opacity = '0';
+    });
+    setTimeout(() => span.remove(), 1100);
+  }
+}
+
+function setupGift() {
+  const giftBtn = document.getElementById('openGift');
+  if (giftBtn) {
+    const content = document.querySelector('.gift-content');
+    giftBtn.addEventListener('click', () => {
+      giftBtn.classList.add('open');
+      if (content) content.classList.add('show');
+      burstEmojis(giftBtn);
+    });
+  }
+  document.querySelectorAll('[data-reveal]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-reveal');
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('show');
+    });
+  });
+}
+
