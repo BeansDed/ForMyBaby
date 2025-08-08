@@ -4,24 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>To My Love</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>To My Love 💖</h1>
-    <p>
-      You are the sunshine in my cloudy days, the calm in my storms, and the smile in my soul.
-      Every day with you is a beautiful gift, and I’m grateful for your love.
-    </p>
+  <main class="container">
+    <header class="hero">
+      <h1>To My Love 💖</h1>
+      <p class="lead">
+        You are the sunshine in my cloudy days, the calm in my storms, and the smile in my soul.
+        Every day with you is a beautiful gift. Thank you for being my favorite person.
+      </p>
 
-    <div class="heart" onclick="incrementLove()">❤️</div>
-    <div id="counter">0 Loves</div>
+      <div class="heart" id="heartBtn" aria-label="Tap to add love" role="button" tabindex="0">❤️</div>
+      <div id="counter" class="counter">0 Loves</div>
 
-    <a href="flower.html" class="love-button">💐 See Your Flower</a>
-  </div>
+      <div class="cta-row">
+        <a href="#reasons" class="love-button ghost">Why I love you</a>
+        <a href="flower.html" class="love-button">💐 A flower for you</a>
+      </div>
+    </header>
 
-  <footer>With all my love, Ardre</footer>
+    <section id="reasons" class="section reveal-on-scroll">
+      <h2 class="section-title">Reasons I adore you ✨</h2>
+      <ul class="reasons">
+        <li>Your laugh makes bad days feel small.</li>
+        <li>You listen to the little things—and remember them.</li>
+        <li>You're kind, even when no one's watching.</li>
+        <li>We can be silly and serious in the same minute.</li>
+        <li>You make “home” feel like a person.</li>
+      </ul>
+    </section>
+
+    <section class="section reveal-on-scroll">
+      <div class="card">
+        <h3>Our Memories 📸</h3>
+        <p>Every photo, every laugh, every late-night talk… they’re treasures I keep close.</p>
+        <a href="memories.html" class="love-button">💌 Open Memories</a>
+      </div>
+    </section>
+
+    <section class="section reveal-on-scroll">
+      <div class="card">
+        <h3>A Little Letter 📝</h3>
+        <p>I wrote you something small that feels like us.</p>
+        <a href="letter.html" class="love-button">📖 Read the Letter</a>
+      </div>
+    </section>
+
+    <section class="section reveal-on-scroll">
+      <div class="card">
+        <h3>Our Future 🔮</h3>
+        <p>Some promises, plans, and daydreams I'd love to share with you.</p>
+        <a href="future.html" class="love-button">🌙 Peek Ahead</a>
+      </div>
+    </section>
+
+    <section class="section tiny reveal-on-scroll">
+      <button id="shareBtn" class="love-button ghost small">Share this with you 💌</button>
+    </section>
+  </main>
+
+  <footer class="footer">With all my love, Ardre • <a href="index.html">Home</a></footer>
 
   <script src="script.js"></script>
 </body>
