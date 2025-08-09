@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Date Idea Generator ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .idea { min-height: 64px; }
+    .saved { margin-top: 12px; text-align:left; display:grid; gap:8px; }
+    .saved .item { background: rgba(255,255,255,.12); padding:10px; border-radius:12px; box-shadow: 0 6px 14px rgba(0,0,0,.2); display:flex; justify-content:space-between; align-items:center; }
+    .saved button { background: rgba(255,255,255,.25); border:none; padding:6px 10px; border-radius:999px; color:#fff; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <main class="container page">
+    <h1>Date Idea Generator ✨</h1>
+    <p class="lead">Press the button and I’ll pick us something cute to do.</p>
+
+    <div class="card">
+      <p id="idea" class="typewrap idea"></p>
+      <div class="cta-row" style="margin-top:10px;">
+        <button id="roll" class="love-button">🎲 Surprise me</button>
+        <button id="save" class="love-button ghost">💾 Save this</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">Saved ideas</h3>
+      <div id="saved" class="saved"></div>
+    </div>
+
+    <a href="index.html" class="back-link">⬅ Back to Home</a>
+  </main>
+  <footer class="footer">With all my love, Ardre • <a href="index.html">Home</a></footer>
+
+  <script>
+    const IDEAS = [
+      "Sunset walk with street-food taste test.",
+      "Homemade tacos + movie marathon—your pick first.",
+      "Karaoke at home (winner gets forehead kisses).",
+      "Photo scavenger hunt around campus/city.",
+      "Bake cookies and decorate them like memes.",
+      "Board game night + loser does the dishes.",
+      "Stargazing on a blanket with hot choco.",
+      "Library date: pick books for each other.",
+      "Ice cream run after a mini dance-off.",
+      "Cook a dish neither of us has tried."
+    ];
+
+    const key = 'savedDateIdeas';
+    const ideaEl = document.getElementById('idea');
+    const roll = document.getElementById('roll');
+    const saveBtn = document.getElementById('save');
+    const listEl = document.getElementById('saved');
+    let current = "";
+
+    function load(){ try{ return JSON.parse(localStorage.getItem(key)||'[]'); }catch{ return []; } }
+    function save(list){ localStorage.setItem(key, JSON.stringify(list)); }
+    function typeTo(el, text, speed=18){
+      el.textContent=''; const c=document.createElement('span'); c.className='cursor'; c.textContent='│'; el.appendChild(c);
+      let i=0; (function t(){ if(i<text.length){ c.insertAdjacentText('beforebegin', text[i++]); setTimeout(t, speed); } else c.remove(); })();
+    }
+
+    function reroll(){
+      const pick = IDEAS[Math.floor(Math.random()*IDEAS.length)];
+      current = pick; typeTo(ideaEl, pick);
+    }
+
+    function render(){
+      listEl.innerHTML='';
+      load().forEach((txt, i)=>{
+        const row = document.createElement('div'); row.className='item';
+        row.innerHTML = `<span>${txt}</span><button data-i="${i}">Remove</button>`;
+        listEl.appendChild(row);
+      });
+    }
+
+    listEl.addEventListener('click', e => {
+      const idx = e.target.getAttribute('data-i');
+      if(idx!==null){ const arr=load(); arr.splice(parseInt(idx,10),1); save(arr); render(); }
+    });
+
+    roll.addEventListener('click', reroll);
+    saveBtn.addEventListener('click', ()=>{ if(!current) return; const arr=load(); if(!arr.includes(current)){ arr.unshift(current); save(arr); render(); }});
+
+    // first idea
+    reroll(); render();
+  </script>
+</body>
+</html>
