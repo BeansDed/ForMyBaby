@@ -2,78 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>To My Love</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>For You</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <main class="container">
-    <header class="hero">
-      <h1>To My Love 💖</h1>
-      <p class="lead">
-        You are the sunshine in my cloudy days, the calm in my storms, and the smile in my soul.
-        Every day with you is a beautiful gift. Thank you for being my favorite person.
-      </p>
+  <div class="container">
+    <section class="hero">
+      <h1>For You</h1>
+      <p class="lead">A little place filled with notes, memories, and reasons I adore you.</p>
 
-      <div class="heart" id="heartBtn" aria-label="Tap to add love" role="button" tabindex="0">❤️</div>
-      <div id="counter" class="counter">0 Loves</div>
+      <div class="section tiny">
+        <div class="heart" id="heart">💗</div>
+        <div class="counter" id="counter">0 taps</div>
+      </div>
 
       <div class="cta-row">
-        <a href="reasons.html" class="love-button ghost">Why I love you</a>
-        <a href="flower.html" class="love-button">💐 A flower for you</a>
+        <a class="love-button" href="reasons.html">Reasons</a>
+        <a class="love-button" href="letter.html">Letter</a>
+        <a class="love-button" href="memories.html">Memories</a>
       </div>
-    </header>
 
-    <section class="section reveal-on-scroll">
-      <div class="card">
-        <h3>Our Memories 📸</h3>
-        <p>Photos coming soon. I’m picking our cutest ones—please wait a little bit. 🫶</p>
-        <a href="memories.html" class="love-button soon">⏳ Coming Soon</a>
+      <div class="cta-row">
+        <a class="love-button ghost small" href="date.html">Dates</a>
+        <a class="love-button ghost small" href="future.html">Future</a>
       </div>
     </section>
 
-    <section class="section reveal-on-scroll">
-      <div class="card">
-        <h3>A Little Letter 📝</h3>
-        <p>I wrote you something small that feels like us.</p>
-        <a href="letter.html" class="love-button">📖 Read the Letter</a>
+    <section class="section">
+      <h2 class="section-title">Hi, Baby 💌</h2>
+      <div class="card reveal-on-scroll">
+        This is a tiny website I made just for you—open it whenever you need a smile.
       </div>
     </section>
+  </div>
 
-    <section class="section reveal-on-scroll">
-      <div class="card">
-        <h3>Open a Surprise 🎁</h3>
-        <p>A tiny box with little happy things inside. Tap to open.</p>
-        <a href="gift.html" class="love-button">🎁 Open Gift</a>
-      </div>
-    </section>
-
-    
-    <section class="section reveal-on-scroll">
-      <div class="card">
-        <h3>Love Notes 💌</h3>
-        <p>Write little messages for each other. They’ll save on your phone.</p>
-        <a href="notes.html" class="love-button">📝 Open Love Notes</a>
-      </div>
-    </section>
-
-    <section class="section reveal-on-scroll">
-      <div class="card">
-        <h3>Date Idea Generator ✨</h3>
-        <p>Can’t decide? Let fate (me) pick something cute for us.</p>
-        <a href="date.html" class="love-button">🎲 Surprise Us</a>
-      </div>
-    </section>
-
-
-    <section class="section tiny reveal-on-scroll">
-      <button id="shareBtn" class="love-button ghost small">Share this with you 💌</button>
-    </section>
-  </main>
-
-  <footer class="footer">With all my love, Ardre • <a href="index.html">Home</a></footer>
-
+  <div class="footer">Made with love.</div>
   <script src="script.js"></script>
 </body>
 </html>

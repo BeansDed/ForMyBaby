@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Our Memories 📸</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Memories</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <main class="container page">
-    <h1>Our Memories 📸</h1>
-    <p class="lead">I’m setting this up with our real photos. Coming soon—promise. 🫶</p>
+  <div class="container">
+    <a class="back-link" href="index.html">← Back</a>
+    <section class="page">
+      <h1>Our Memories 📸</h1>
+      <div class="gallery">
+        <!-- Replace src with your images -->
+        <img src="BABY ROBLOX.jpg" alt="Memory 1">
+        <img src="placeholder" alt="Memory 2">
+        <img src="placeholder" alt="Memory 3">
+        <img src="placeholder" alt="Memory 4">
+        <img src="placeholder" alt="Memory 5">
+        <img src="placeholder" alt="Memory 6">
+      </div>
+    </section>
+  </div>
 
-    <div class="soon-wrap">
-      <div class="spinner" aria-hidden="true"></div>
-      <p class="soon-text">Loading cuteness… please wait ✨</p>
-    </div>
+  <div class="lightbox" id="lightbox">
+    <img id="lightboxImg" alt="preview">
+  </div>
 
-    <a href="index.html" class="back-link">⬅ Back to Home</a>
-  </main>
-  <footer class="footer">With all my love, Ardre • <a href="index.html">Home</a></footer>
   <script src="script.js"></script>
 </body>
 </html>

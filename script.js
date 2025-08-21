@@ -1,191 +1,178 @@
-// Persistent love counter + small heart burst + scroll reveal + optional share + typewriter
-let count = 0;
-
-function updateCounterText() {
-  const counter = document.getElementById('counter');
-  if (!counter) return;
-  counter.textContent = count + (count === 1 ? ' Love' : ' Loves');
-}
-
-function saveCount() {
-  try { localStorage.setItem('loveCount', String(count)); } catch {}
-}
-
-function loadCount() {
-  try {
-    const stored = localStorage.getItem('loveCount');
-    count = stored ? parseInt(stored, 10) : 0;
-  } catch {
-    count = 0;
-  }
-  updateCounterText();
-}
-
-function burstHearts(anchorEl) {
-  const rect = anchorEl.getBoundingClientRect();
-  for (let i = 0; i < 10; i++) {
-    const span = document.createElement('span');
-    span.textContent = '💖';
-    span.style.position = 'fixed';
-    span.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*80) + 'px';
-    span.style.top = (rect.top + rect.height/2 + (Math.random()-0.5)*40) + 'px';
-    span.style.fontSize = (14 + Math.random()*14) + 'px';
-    span.style.opacity = '1';
-    span.style.transition = 'transform .8s ease, opacity .9s ease';
-    span.style.transform = 'translateY(0)';
-    document.body.appendChild(span);
-    requestAnimationFrame(() => {
-      span.style.transform = `translateY(-${50 + Math.random()*60}px)`;
-      span.style.opacity = '0';
-    });
-    setTimeout(() => span.remove(), 950);
-  }
-}
-
-function incrementLove() {
-  count++;
-  updateCounterText();
-  saveCount();
-  const heart = document.getElementById('heartBtn') || document.querySelector('.heart');
-  if (heart) {
+// Heart counter on index
+const heart = document.getElementById('heart');
+const counter = document.getElementById('counter');
+if (heart && counter) {
+  let count = 0;
+  heart.addEventListener('click', () => {
+    count++;
     heart.classList.add('clicked');
-    burstHearts(heart);
     setTimeout(() => heart.classList.remove('clicked'), 180);
-  }
-}
-
-function setupHeart() {
-  const heart = document.getElementById('heartBtn') || document.querySelector('.heart');
-  if (!heart) return;
-  heart.addEventListener('click', incrementLove);
-  heart.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); incrementLove(); }
+    counter.textContent = `${count} ${count === 1 ? 'tap' : 'taps'}`;
   });
 }
 
-function setupReveal() {
-  const els = document.querySelectorAll('.reveal-on-scroll');
-  if (!('IntersectionObserver' in window)) {
-    els.forEach(el => el.classList.add('visible'));
-    return;
-  }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12 });
-  els.forEach(el => io.observe(el));
-}
-
-function setupShare() {
-  const btn = document.getElementById('shareBtn');
-  if (!btn) return;
-  btn.addEventListener('click', async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'A little something for you 💌',
-          text: 'Open this—made just for you.',
-          url: location.href
-        });
-      } catch {}
-    } else {
-      alert('Copy this link and send it to her: ' + location.href);
-    }
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal-on-scroll');
+function onScroll() {
+  reveals.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 80) el.classList.add('visible');
   });
 }
+window.addEventListener('scroll', onScroll);
+onScroll();
 
-// Lightbox for memories page
-function setupLightbox() {
-  const imgs = document.querySelectorAll('.gallery img');
-  const lightbox = document.querySelector('.lightbox');
-  const lbImg = lightbox ? lightbox.querySelector('img') : null;
-  if (!imgs.length || !lightbox || !lbImg) return;
+// Letter typewriter
+const typewrap = document.getElementById('typewrap');
+if (typewrap) {
+  const text = `Hi love,
 
-  imgs.forEach(img => img.addEventListener('click', () => {
-    lbImg.src = img.src;
-    lightbox.classList.add('open');
-  }));
-  lightbox.addEventListener('click', () => {
-    lightbox.classList.remove('open');
-  });
-}
+I made this small corner of the internet just for you.
+When days feel heavy, I want you to open this and remember:
+you are cherished, you are seen, and you are more than enough.
 
-// Typewriter (letter page)
-function typewriter(el, speed = 22) {
-  if (!el) return;
-  const full = el.textContent;
-  el.textContent = '';
-  const cursor = document.createElement('span');
-  cursor.className = 'cursor';
-  cursor.textContent = '│';
-  el.appendChild(cursor);
-
+Always,
+me`;
+  const holder = document.getElementById('typeText');
   let i = 0;
-  function tick() {
-    if (i < full.length) {
-      cursor.insertAdjacentText('beforebegin', full[i]);
-      i++;
-      setTimeout(tick, full[i-1] === '\n' ? speed*6 : speed);
-    } else {
-      cursor.remove();
+  (function typeit(){
+    if (i <= text.length) {
+      holder.textContent = text.slice(0, i++);
+      setTimeout(typeit, 28);
+    }
+  })();
+}
+
+// Memories lightbox
+const gallery = document.querySelector('.gallery');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+if (gallery && lightbox && lightboxImg) {
+  gallery.addEventListener('click', (e) => {
+    const t = e.target;
+    if (t.tagName === 'IMG') {
+      lightboxImg.src = t.src;
+      lightbox.classList.add('open');
+    }
+  });
+  lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+}
+
+// === Dates (dynamic, saved in localStorage) ===
+(() => {
+  const KEY = 'dateIdeas.v1';
+  const form = document.getElementById('dateForm');
+  const input = document.getElementById('dateInput');
+  const list = document.getElementById('dateList');
+  const clearBtn = document.getElementById('clearDates');
+  if (!form || !input || !list) return;
+
+  const defaults = [
+    { id: Date.now()-4, text: 'Sunset picnic + playlist', done: false },
+    { id: Date.now()-3, text: 'Coffee + bookshop stroll', done: false },
+    { id: Date.now()-2, text: 'DIY pizza night', done: false },
+    { id: Date.now()-1, text: 'Night walk + ice cream', done: false }
+  ];
+
+  function loadIdeas(){
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) {
+        localStorage.setItem(KEY, JSON.stringify(defaults));
+        return [...defaults];
+      }
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) throw new Error('not array');
+      return arr;
+    } catch(e){
+      console.warn('Resetting saved ideas due to parse error:', e);
+      localStorage.setItem(KEY, JSON.stringify(defaults));
+      return [...defaults];
     }
   }
-  tick();
-}
+  function saveIdeas(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
 
-function setupTypewriter() {
-  const tw = document.querySelector('.typewrap[data-typer="true"]');
-  if (tw) typewriter(tw, 22);
-}
+  let ideas = loadIdeas();
 
-document.addEventListener('DOMContentLoaded', () => {
-  loadCount();
-  setupHeart();
-  setupReveal();
-  setupShare();
-  setupLightbox();
-  setupTypewriter();
-  setupGift();
-});
-
-
-function burstEmojis(anchorEl, emojis=['💖','✨','🎉','🌟']) {
-  const rect = anchorEl.getBoundingClientRect();
-  for (let i = 0; i < 14; i++) {
-    const span = document.createElement('span');
-    span.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    span.style.position = 'fixed';
-    span.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*120) + 'px';
-    span.style.top = (rect.top + rect.height/2 + (Math.random()-0.5)*60) + 'px';
-    span.style.fontSize = (14 + Math.random()*18) + 'px';
-    span.style.opacity = '1';
-    span.style.transition = 'transform .9s ease, opacity 1s ease';
-    span.style.transform = 'translateY(0)';
-    span.style.pointerEvents = 'none';
-    document.body.appendChild(span);
-    requestAnimationFrame(() => {
-      span.style.transform = `translate(${(Math.random()-0.5)*80}px, -${70 + Math.random()*80}px)`;
-      span.style.opacity = '0';
-    });
-    setTimeout(() => span.remove(), 1100);
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[c]);
   }
-}
 
-function setupGift() {
-  const giftBtn = document.getElementById('openGift');
-  if (giftBtn) {
-    const content = document.querySelector('.gift-content');
-    giftBtn.addEventListener('click', () => {
-      giftBtn.classList.add('open');
-      if (content) content.classList.add('show');
-      burstEmojis(giftBtn);
+  function render(){
+    list.innerHTML = '';
+    if (ideas.length === 0){
+      const li = document.createElement('li');
+      li.className = 'dates-empty';
+      li.textContent = 'No ideas yet—add your first one above!';
+      list.appendChild(li);
+      return;
+    }
+    ideas.forEach(item => {
+      const li = document.createElement('li');
+      li.className = 'dates-item' + (item.done ? ' done' : '');
+      li.innerHTML = `
+        <label class="dates-left">
+          <input type="checkbox" class="dates-check" ${item.done ? 'checked' : ''} data-id="${item.id}" />
+          <span class="dates-text">${escapeHtml(item.text)}</span>
+        </label>
+        <div class="dates-right">
+          <button class="dates-edit" data-id="${item.id}" aria-label="Edit">✎</button>
+          <button class="dates-delete" data-id="${item.id}" aria-label="Delete">✕</button>
+        </div>
+      `;
+      list.appendChild(li);
     });
   }
-  document.querySelectorAll('[data-reveal]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-reveal');
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle('show');
-    });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+    ideas.unshift({ id: Date.now(), text, done: false });
+    saveIdeas(ideas);
+    input.value = '';
+    render();
   });
-}
 
+  list.addEventListener('click', (e) => {
+    const del = e.target.closest('.dates-delete');
+    const edit = e.target.closest('.dates-edit');
+    const checkbox = e.target.closest('.dates-check');
+
+    if (del){
+      const id = +del.dataset.id;
+      ideas = ideas.filter(i => i.id !== id);
+      saveIdeas(ideas); render(); return;
+    }
+    if (edit){
+      const id = +edit.dataset.id;
+      const item = ideas.find(i => i.id === id);
+      if (!item) return;
+      const next = prompt('Edit this idea:', item.text);
+      if (next !== null){
+        const txt = next.trim();
+        if (txt){ item.text = txt; saveIdeas(ideas); render(); }
+      }
+      return;
+    }
+    if (checkbox){
+      const id = +checkbox.dataset.id;
+      const item = ideas.find(i => i.id === id);
+      if (!item) return;
+      item.done = checkbox.checked;
+      saveIdeas(ideas); render(); return;
+    }
+  });
+
+  if (clearBtn){
+    clearBtn.addEventListener('click', () => {
+      if (confirm('Clear all saved date ideas?')){
+        ideas = []; saveIdeas(ideas); render();
+      }
+    });
+  }
+
+  render();
+})();
