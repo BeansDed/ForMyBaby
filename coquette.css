@@ -1,0 +1,165 @@
+/* === Coquette Add-On Theme (bows, lace, gingham, sparkles) ===
+   Drop-in override for the existing pink theme.
+   Author: ChatGPT (super cute koket ver. ♡)
+================================================================ */
+:root{
+  --rose:#ffdce9;
+  --blush:#ffcfe1;
+  --petal:#ffa9c9;
+  --ribbon:#ff7fb1;
+  --ivory:#fffafc;
+  --plum:#6c3a5b;
+  --lace:#ffeef6;
+}
+
+/* Soft gingham backdrop overlay */
+body{
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.15) 0 22px, transparent 22px 44px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 22px, transparent 22px 44px),
+    radial-gradient(1200px 800px at 100% -10%, #ffe8f2 0%, rgba(255,232,242,.7) 50%, transparent 70%),
+    radial-gradient(1000px 700px at -10% 0%, #ffd7e7 0%, rgba(255,215,231,.7) 50%, transparent 70%),
+    linear-gradient(135deg, var(--rose), var(--blush) 50%, var(--petal));
+  background-blend-mode: soft-light, soft-light, normal, normal, normal;
+}
+
+/* Fancy script headline for extra koket vibes */
+h1, .hero h1{
+  font-family: 'Parisienne', 'Great Vibes', cursive;
+  letter-spacing: .6px;
+  color:#8a3d70;
+  text-shadow: 0 10px 30px rgba(140,60,110,.22);
+}
+
+/* Lace-y card edge using scalloped mask illusion */
+.hero, .page, .card, .promise, .dates-item, .typewrap{
+  position: relative;
+  border-radius: 26px;
+  border: 2px solid #ffd3e6;
+  box-shadow:
+    0 18px 30px rgba(255,126,177,.28),
+    inset 0 1px 0 #fff;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.44));
+  overflow: hidden;
+}
+
+.hero::before, .page::before, .card::before, .promise::before, .dates-item::before, .typewrap::before{
+  content:'';
+  position:absolute; inset:-8px;
+  background:
+    radial-gradient(circle at 12px 12px, var(--lace) 8px, transparent 9px) repeat;
+  background-size: 24px 24px;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  padding:8px; border-radius:28px;
+  pointer-events:none; opacity:.65;
+}
+
+/* Ribbon tab + bow on hero */
+.hero::after{
+  content:'🎀';
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%) rotate(-6deg);
+  font-size:28px; filter: drop-shadow(0 8px 12px rgba(255,126,177,.45));
+}
+.section-title{ font-weight:900; font-family:'Playfair Display', serif; }
+
+/* Love buttons – with tiny bows */
+.love-button{
+  border-color:#ffd3e6;
+  background: linear-gradient(180deg, #fff, #fff3f8);
+  color:#7a2e56;
+}
+.love-button::after{
+  content:'🎀';
+  position:absolute; left:-2px; top:-8px;
+  transform:rotate(-12deg);
+  font-size:14px; opacity:.95;
+}
+.love-button:hover{ transform:translateY(-2px) scale(1.04); }
+
+/* Back link – cute arrow */
+.back-link{ position:relative; }
+.back-link::after{
+  content:'⋆'; position:absolute; right:-10px; top:-10px; font-size:14px; opacity:.7;
+}
+
+/* Photo gallery as sticker polaroids */
+.gallery{ gap:14px; }
+.gallery img{
+  border-radius:14px;
+  box-shadow:
+    0 0 0 8px #fff,
+    0 0 0 10px #ffd6e8,
+    0 16px 26px rgba(255,126,177,.35);
+  transform: rotate(var(--tilt, -1.2deg));
+}
+.gallery img:nth-child(odd){ --tilt: -1.8deg; }
+.gallery img:nth-child(3n){ --tilt: 1.4deg; }
+
+/* Typewriter area prettified */
+.typewrap{
+  background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.5));
+  border-color:#ffd6e8;
+}
+
+/* Dates list polish */
+.dates-item{ background:linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.5)); }
+.dates-edit, .dates-delete{ border-color:#ffd6e8; }
+
+/* Sparkles drifting in the page */
+@keyframes twinkle {
+  0%,100%{ transform:translateY(0) scale(1); opacity:.9 }
+  50%{ transform:translateY(-8px) scale(1.08); opacity:.6 }
+}
+.container::after{
+  content:'✦  ✧   ✦   ✧  ✦';
+  position: absolute; right: 10px; top: -8px; pointer-events:none;
+  animation: twinkle 2.8s ease-in-out infinite;
+  color:#d28bb3; text-shadow: 0 8px 14px rgba(210,139,179,.45);
+  font-size:14px; letter-spacing:6px;
+  pointer-events: none;
+}
+
+/* Heart confetti (spawned from JS) */
+.confetti-heart{
+  position: fixed; z-index: 999999;
+  transform: translate(-50%, -50%);
+  font-size: 18px; opacity: 1; pointer-events: none;
+  filter: drop-shadow(0 6px 8px rgba(255,126,177,.35));
+  animation: floatUp var(--dur, 1400ms) ease-out forwards;
+}
+@keyframes floatUp{
+  to{
+    transform:
+      translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)))
+      rotate(var(--rot, 20deg)) scale(.85);
+    opacity: 0;
+  }
+}
+
+/* Fallback for mask support */
+@supports not (mask: linear-gradient(#000 0 0)) {
+  .hero::before, .page::before, .card::before, .promise::before, .dates-item::before, .typewrap::before { display:none; }
+}
+@supports not (-webkit-mask: linear-gradient(#000 0 0)) {
+  .hero::before, .page::before, .card::before, .promise::before, .dates-item::before, .typewrap::before { display:none; }
+}
+
+/* Small screen tweaks */
+@media (max-width:520px){
+  .container::after{ display:none; }
+  .love-button{ font-size:.96rem; padding:12px 18px; }
+  .gallery img{ height: 150px; }
+}
+
+.hero::before,
+.page::before,
+.card::before,
+.promise::before,
+.dates-item::before,
+.typewrap::before{
+  display: none !important;
+  background: none !important;
+  content: none !important;
+}
