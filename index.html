@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f43f5e">
+  <title>For You ♡</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="lace-overlay"></div>
+  <div class="floating-hearts" aria-hidden="true"></div>
+  
+  <!-- Added sweet music player -->
+  <div class="music-player">
+    <button id="music-toggle" class="music-btn" title="Play romantic music">
+      🎵
+    </button>
+    <audio id="background-music" loop>
+      <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
+    </audio>
+  </div>
+  
+  <div class="container">
+    <div class="hero">
+      <div class="sparkles" aria-hidden="true">
+        <span class="sparkle">✧</span>
+        <span class="sparkle">✦</span>
+        <span class="sparkle">✧</span>
+        <span class="sparkle">⋆</span>
+        <span class="sparkle">✨</span>
+      </div>
+      
+      <!-- Added sweet daily message -->
+      <div class="daily-message" id="daily-message">
+        <div class="message-icon">💝</div>
+        <p class="daily-text">Loading your daily love message...</p>
+      </div>
+      
+      <h1 class="main-title">Hi, My baby!</h1>
+      <div class="heart-divider">♡</div>
+      <p class="intro">I created this enchanted space filled with all my love for you. Each charm holds a piece of my heart ✨</p>
+
+      <!-- Added love meter -->
+      <div class="love-meter">
+        <div class="meter-label">My Love for You:</div>
+        <div class="meter-bar">
+          <div class="meter-fill" id="love-fill"></div>
+        </div>
+        <div class="meter-text">∞% and growing every second!</div>
+      </div>
+
+      <div class="hearts-grid" role="navigation" aria-label="Love sections">
+        <a href="reasons.html" class="heart-card" data-sweet-message="100 reasons why you're perfect!">
+          <div class="heart-icon">💕</div>
+          <span class="heart-label">Reasons I Love You</span>
+          <div class="heart-shimmer"></div>
+        </a>
+        
+        <a href="letter.html" class="heart-card" data-sweet-message="A letter straight from my heart">
+          <div class="heart-icon">💌</div>
+          <span class="heart-label">Love Letter</span>
+          <div class="heart-shimmer"></div>
+        </a>
+        
+        <a href="memories.html" class="heart-card" data-sweet-message="Our beautiful journey together">
+          <div class="heart-icon">📸</div>
+          <span class="heart-label">Our Memories</span>
+          <div class="heart-shimmer"></div>
+        </a>
+        
+        <a href="notes.html" class="heart-card" data-sweet-message="Little notes of love for you">
+          <div class="heart-icon">📝</div>
+          <span class="heart-label">Sweet Notes</span>
+          <div class="heart-shimmer"></div>
+        </a>
+        
+        <a href="future.html" class="heart-card" data-sweet-message="Our dreams coming true together">
+          <div class="heart-icon">💍</div>
+          <span class="heart-label">Our Future</span>
+          <div class="heart-shimmer"></div>
+        </a>
+        
+        <a href="gift.html" class="heart-card" data-sweet-message="A special surprise just for you">
+          <div class="heart-icon">🎁</div>
+          <span class="heart-label">Special Gift</span>
+          <div class="heart-shimmer"></div>
+        </a>
+        
+        <a href="monthsary.html" class="heart-card" data-sweet-message="Celebrating every moment with you">
+          <div class="heart-icon">🗓️</div>
+          <span class="heart-label">Monthsary</span>
+          <div class="heart-shimmer"></div>
+        </a>
+
+        <!-- Added new sweet sections -->
+        <a href="compliments.html" class="heart-card" data-sweet-message="Daily compliments just for you">
+          <div class="heart-icon">🌟</div>
+          <span class="heart-label">Daily Compliments</span>
+          <div class="heart-shimmer"></div>
+        </a>
+
+        <a href="playlist.html" class="heart-card" data-sweet-message="Songs that remind me of you">
+          <div class="heart-icon">🎶</div>
+          <span class="heart-label">Our Playlist</span>
+          <div class="heart-shimmer"></div>
+        </a>
+      </div>
+
+      <!-- Added interactive love button -->
+      <div class="interactive-section">
+        <button class="love-button" id="send-love" onclick="sendLove()">
+          Send Me Your Love 💕
+        </button>
+        <div class="love-counter">
+          <span>Love received today: </span>
+          <span id="love-count">0</span>
+          <span> times ♡</span>
+        </div>
+      </div>
+
+      <div class="love-message">
+        <div class="bow-accent">🎀</div>
+        <p class="message-text">Every pixel, every word, every detail was crafted with endless love just for you, my darling ♡</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Added sweet tooltip for hover messages -->
+  <div id="sweet-tooltip" class="sweet-tooltip"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
