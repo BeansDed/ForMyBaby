@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f43f5e">
+  <title>Open When Letters ♡</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .letters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+      gap: clamp(16px, 4vw, 20px);
+      margin: clamp(24px, 6vw, 32px) 0;
+    }
+    
+    .letter-envelope {
+      position: relative;
+      background: linear-gradient(145deg, var(--rose-50), var(--rose-100));
+      border: 2px solid var(--rose-300);
+      border-radius: clamp(12px, 3vw, 16px);
+      padding: clamp(20px, 5vw, 28px);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-height: clamp(140px, 35vw, 180px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .letter-envelope:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-medium);
+      border-color: var(--rose-400);
+    }
+    
+    .letter-envelope.opened {
+      background: linear-gradient(145deg, #d1fae5, #a7f3d0);
+      border-color: #10b981;
+    }
+    
+    .envelope-icon {
+      font-size: clamp(36px, 9vw, 48px);
+      margin-bottom: clamp(10px, 2.5vw, 12px);
+      animation: floatEnvelope 3s ease-in-out infinite;
+    }
+    
+    @keyframes floatEnvelope {
+      0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+      50% {
+        transform: translateY(-8px) rotate(2deg);
+      }
+    }
+    
+    .letter-title {
+      color: var(--rose-700);
+      font-family: var(--font-hand);
+      font-size: clamp(18px, 4.5vw, 22px);
+      margin: clamp(8px, 2vw, 10px) 0;
+      font-weight: 700;
+    }
+    
+    .letter-preview {
+      color: var(--mauve);
+      font-size: clamp(13px, 3.2vw, 15px);
+      font-style: italic;
+      margin: clamp(4px, 1vw, 6px) 0;
+    }
+    
+    .opened-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #10b981;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: clamp(10px, 2.5vw, 12px);
+      font-weight: 700;
+      display: none;
+    }
+    
+    .letter-envelope.opened .opened-badge {
+      display: block;
+      animation: bounceIn 0.5s ease;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    
+    /* Modal styles */
+    .letter-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .letter-modal.show {
+      display: flex;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .letter-content {
+      background: var(--white);
+      border: 3px solid var(--rose-300);
+      border-radius: clamp(16px, 4vw, 24px);
+      padding: clamp(28px, 7vw, 40px);
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideUp 0.5s ease;
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .letter-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--rose-500);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .letter-close:hover {
+      background: var(--rose-600);
+      transform: rotate(90deg);
+    }
+    
+    .letter-header {
+      text-align: center;
+      margin-bottom: clamp(20px, 5vw, 28px);
+    }
+    
+    .letter-header h2 {
+      color: var(--rose-600);
+      font-family: var(--font-hand);
+      font-size: clamp(28px, 7vw, 36px);
+      margin: 0 0 clamp(8px, 2vw, 10px);
+    }
+    
+    .letter-header .emoji {
+      font-size: clamp(36px, 9vw, 48px);
+      margin-bottom: clamp(10px, 2.5vw, 12px);
+    }
+    
+    .letter-body {
+      font-family: var(--font-serif);
+      font-size: clamp(15px, 3.8vw, 17px);
+      line-height: 1.75;
+      color: var(--text-dark);
+    }
+    
+    .letter-body p {
+      margin: clamp(12px, 3vw, 16px) 0;
+    }
+    
+    .letter-signature {
+      text-align: right;
+      margin-top: clamp(20px, 5vw, 28px);
+      font-style: italic;
+      color: var(--rose-600);
+      font-family: var(--font-hand);
+      font-size: clamp(18px, 4.5vw, 22px);
+    }
+  </style>
+</head>
+<body>
+  <div class="lace-overlay"></div>
+  <div class="floating-hearts" aria-hidden="true"></div>
+  
+  <div class="container">
+    <div class="page">
+      <div class="topbar">
+        <a href="index.html" class="back-link">← Back to Home</a>
+      </div>
+      
+      <div class="sparkles" aria-hidden="true">
+        <span class="sparkle">✧</span>
+        <span class="sparkle">✦</span>
+        <span class="sparkle">✧</span>
+      </div>
+      
+      <h1 class="page-title">Open When Letters</h1>
+      <div class="heart-divider">♡</div>
+      
+      <p style="text-align: center; color: var(--mauve); margin: 20px auto; max-width: 600px; font-size: clamp(14px, 3.5vw, 16px);">
+        For those moments when you need a little extra love. Click on any letter when the time feels right. 💕
+      </p>
+      
+      <div class="letters-grid">
+        <div class="letter-envelope" onclick="openLetter(this, 'miss')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">💌</div>
+          <div class="letter-title">Open When You Miss Me</div>
+          <div class="letter-preview">For when distance feels too far</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'sad')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">🤗</div>
+          <div class="letter-title">Open When You're Sad</div>
+          <div class="letter-preview">To bring sunshine to your day</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'happy')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">🎉</div>
+          <div class="letter-title">Open When You're Happy</div>
+          <div class="letter-preview">To celebrate your joy with you</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'stressed')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">🌸</div>
+          <div class="letter-title">Open When You're Stressed</div>
+          <div class="letter-preview">A reminder to breathe and relax</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'morning')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">☀️</div>
+          <div class="letter-title">Open in the Morning</div>
+          <div class="letter-preview">Start your day with love</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'night')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">🌙</div>
+          <div class="letter-title">Open at Night</div>
+          <div class="letter-preview">Sweet dreams, my love</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'success')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">🏆</div>
+          <div class="letter-title">Open When You Succeed</div>
+          <div class="letter-preview">I'm so proud of you!</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'doubt')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">💪</div>
+          <div class="letter-title">Open When You Doubt Yourself</div>
+          <div class="letter-preview">Believe in yourself like I do</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'birthday')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">🎂</div>
+          <div class="letter-title">Open on Your Birthday</div>
+          <div class="letter-preview">Celebrating you today!</div>
+        </div>
+        
+        <div class="letter-envelope" onclick="openLetter(this, 'random')">
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">✨</div>
+          <div class="letter-title">Open When You Need a Smile</div>
+          <div class="letter-preview">Just because I love you</div>
+        </div>
+      </div>
+      
+      <div class="love-message">
+        <div class="bow-accent">💝</div>
+        <p class="message-text">These letters are little pieces of my heart, waiting for you ♡</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Letter Modal -->
+  <div class="letter-modal" id="letterModal" onclick="closeModal(event)">
+    <div class="letter-content" onclick="event.stopPropagation()">
+      <button class="letter-close" onclick="closeModal()">×</button>
+      <div id="letterBody"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    const letters = {
+      miss: {
+        emoji: '💕',
+        title: 'When You Miss Me',
+        content: `
+          <p>My darling,</p>
+          <p>I know the distance can feel heavy sometimes, like a weight on your heart. But I want you to know that even though we're apart right now, you're never far from my thoughts.</p>
+          <p>Every moment without you makes me appreciate the moments we have together even more. Close your eyes and imagine my arms around you, because that's exactly where my heart is right now.</p>
+          <p>Remember our last hug? I'm saving up the next one, and it's going to be even longer and warmer. Until then, know that you're loved beyond measure, missed beyond words, and thought of more than you could ever imagine.</p>
+          <p>Soon, my love. Soon we'll be together again. ♡</p>
+        `
+      },
+      sad: {
+        emoji: '🤗',
+        title: 'When You're Sad',
+        content: `
+          <p>Sweet baby,</p>
+          <p>I wish I could be there right now to wrap you in the biggest hug and wipe away every tear. Even though I can't physically be there, I'm sending you all my love and warmth through these words.</p>
+          <p>It's okay to feel sad. It's okay to cry. Your feelings are valid, and I'm here for you through it all—the good days and the tough ones too.</p>
+          <p>Remember: this feeling is temporary. The sun will shine again, smiles will come easier, and this moment will pass. You're so much stronger than you know, and you've overcome so much already.</p>
+          <p>I love you in your happiness and in your sadness. All of you, always. 💙</p>
+        `
+      },
+      happy: {
+        emoji: '🎉',
+        title: 'When You're Happy',
+        content: `
+          <p>My sunshine,</p>
+          <p>Your happiness is contagious! Even reading about it or seeing your smile makes my whole world brighter. I'm so glad you're having a wonderful moment right now!</p>
+          <p>This is what life is about—these beautiful, joy-filled moments that make everything worthwhile. I wish I could be there celebrating with you, dancing around and laughing until our stomachs hurt.</p>
+          <p>Soak it all in, my love. Feel every bit of this happiness. You deserve all the good things happening to you and so much more.</p>
+          <p>Keep shining, beautiful. Your joy lights up my life! ✨</p>
+        `
+      },
+      stressed: {
+        emoji: '🌸',
+        title: 'When You're Stressed',
+        content: `
+          <p>Breathe, my love. Just breathe.</p>
+          <p>I know things feel overwhelming right now. Like everything is piling up and you can't catch a break. But I want you to take a moment—just for yourself.</p>
+          <p>Close your eyes. Take a deep breath in... and out. Again. Feel your shoulders relax.</p>
+          <p>Remember: You don't have to do everything perfectly. You don't have to do everything right now. One step at a time, one task at a time. You've got this.</p>
+          <p>And if you need to take a break, take it. Rest is not weakness; it's wisdom. I'm proud of you for everything you do, stressed or not.</p>
+          <p>You're amazing, capable, and stronger than any challenge. I believe in you. 💪💕</p>
+        `
+      },
+      morning: {
+        emoji: '☀️',
+        title: 'Good Morning, Sunshine',
+        content: `
+          <p>Good morning, beautiful! ☀️</p>
+          <p>I hope you slept well and woke up feeling refreshed. As you start this new day, I want you to know that you're the first thing I think about in the morning.</p>
+          <p>Today is full of possibilities! Whatever comes your way, I know you'll handle it with grace and strength. You're going to do amazing things today.</p>
+          <p>Don't forget to:</p>
+          <p>• Drink some water 💧<br>
+          • Eat a good breakfast 🍳<br>
+          • Smile at yourself in the mirror 😊<br>
+          • Remember how loved you are 💕</p>
+          <p>Have a wonderful day, my love. I'll be thinking of you!</p>
+        `
+      },
+      night: {
+        emoji: '🌙',
+        title: 'Good Night, My Love',
+        content: `
+          <p>Good night, my darling 🌙</p>
+          <p>As you lay down to sleep, I want you to know that you've made it through another day, and I'm so proud of you. Whatever happened today—the good, the bad, the in-between—you did your best, and that's all that matters.</p>
+          <p>Let go of any worries or stress. Tomorrow is a new day, but tonight is for rest. Close your eyes and think of all the things that made you smile today.</p>
+          <p>Imagine I'm there with you, holding you close, keeping you safe and warm. Feel the love I'm sending across the distance.</p>
+          <p>Sweet dreams, my precious one. May your sleep be peaceful and your dreams be beautiful. I'll see you in my dreams tonight. 💫</p>
+          <p>I love you to the moon and back. 🌙✨</p>
+        `
+      },
+      success: {
+        emoji: '🏆',
+        title: 'You Did It!',
+        content: `
+          <p>I KNEW YOU COULD DO IT! 🎉</p>
+          <p>Oh my goodness, I'm so incredibly proud of you! Do you have any idea how amazing you are? You set your mind to something, worked hard, and made it happen!</p>
+          <p>This success didn't come by accident—it came because of your dedication, your talent, your persistence, and your incredible spirit. You earned this!</p>
+          <p>Take a moment to really celebrate. You deserve to feel proud, to be happy, to recognize just how wonderful you are. Don't downplay this—own it!</p>
+          <p>I wish I could be there to give you the biggest hug and spin you around in celebration! But know that I'm cheering for you louder than anyone, so proud my heart could burst!</p>
+          <p>You're a superstar, and this is just the beginning! 🌟</p>
+        `
+      },
+      doubt: {
+        emoji: '💪',
+        title: 'You Are Enough',
+        content: `
+          <p>Listen to me, my love,</p>
+          <p>That voice in your head telling you that you're not good enough? It's lying. That doubt creeping in? It doesn't know what I know.</p>
+          <p>I've seen you overcome challenges that would break other people. I've watched you grow, learn, and become stronger. I've witnessed your kindness, your intelligence, your creativity, and your heart.</p>
+          <p>You are MORE than capable. You are MORE than enough. You are exceptional.</p>
+          <p>Everyone feels doubt sometimes—even the most confident people. But doubt doesn't define you. Your actions, your heart, your spirit—that's what defines you.</p>
+          <p>Believe in yourself the way I believe in you. Because from where I'm standing, you're absolutely incredible. And one day, I hope you see yourself through my eyes.</p>
+          <p>You've got this. I know you do. 💕</p>
+        `
+      },
+      birthday: {
+        emoji: '🎂',
+        title: 'Happy Birthday!',
+        content: `
+          <p>🎉 HAPPY BIRTHDAY, MY LOVE! 🎉</p>
+          <p>Today is the day the world became infinitely better because YOU were born. The universe aligned to create someone so incredibly special, and I'm the luckiest person alive to know you.</p>
+          <p>On your birthday, I want you to know:</p>
+          <p>• You make the world brighter just by being in it 🌟<br>
+          • Every year with you is a gift 🎁<br>
+          • You deserve all the happiness today and every day 💕<br>
+          • I'm so grateful you were born 🎂</p>
+          <p>This year is going to be amazing for you—I can feel it. So many beautiful moments, so many dreams coming true, so much love and laughter ahead.</p>
+          <p>I hope your birthday is as special, wonderful, and magical as you are. Celebrate yourself today, because you truly deserve it!</p>
+          <p>All my love, today and always. Happy Birthday, beautiful! 🎊💕🎈</p>
+        `
+      },
+      random: {
+        emoji: '✨',
+        title: 'Just Because',
+        content: `
+          <p>Hey you,</p>
+          <p>There's no special reason for this letter. No specific occasion. I just wanted to remind you that you're loved.</p>
+          <p>Sometimes we need to hear it on a random Tuesday afternoon. Sometimes we need to be reminded when everything is normal and ordinary.</p>
+          <p>You are:</p>
+          <p>• Loved 💕<br>
+          • Important 🌟<br>
+          • Valued 💎<br>
+          • Beautiful ✨<br>
+          • Cherished 💝</p>
+          <p>Not because of what you do or what you achieve, but simply because of who you are. You don't have to earn love—you already have mine, completely and unconditionally.</p>
+          <p>I hope this letter made you smile. That was the whole point. 😊</p>
+          <p>Love you endlessly,<br>Always ♡</p>
+        `
+      }
+    };
+    
+    function openLetter(element, letterId) {
+      element.classList.add('opened');
+      const letter = letters[letterId];
+      
+      const modal = document.getElementById('letterModal');
+      const body = document.getElementById('letterBody');
+      
+      body.innerHTML = `
+        <div class="letter-header">
+          <div class="emoji">${letter.emoji}</div>
+          <h2>${letter.title}</h2>
+        </div>
+        <div class="letter-body">
+          ${letter.content}
+          <div class="letter-signature">
+            Forever yours, ♡<br>
+            Your Love
+          </div>
+        </div>
+      `;
+      
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      
+      // Save opened state
+      saveLetterState(letterId);
+      createConfetti();
+    }
+    
+    function closeModal(event) {
+      if (!event || event.target.id === 'letterModal') {
+        const modal = document.getElementById('letterModal');
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+      }
+    }
+    
+    function saveLetterState(letterId) {
+      const opened = JSON.parse(localStorage.getItem('openedLetters') || '[]');
+      if (!opened.includes(letterId)) {
+        opened.push(letterId);
+        localStorage.setItem('openedLetters', JSON.stringify(opened));
+      }
+    }
+    
+    function loadLetterStates() {
+      const opened = JSON.parse(localStorage.getItem('openedLetters') || '[]');
+      const envelopes = document.querySelectorAll('.letter-envelope');
+      const letterIds = Object.keys(letters);
+      
+      envelopes.forEach((envelope, index) => {
+        if (opened.includes(letterIds[index])) {
+          envelope.classList.add('opened');
+        }
+      });
+    }
+    
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+    
+    window.addEventListener('DOMContentLoaded', loadLetterStates);
+  </script>
+</body>
+</html>
+

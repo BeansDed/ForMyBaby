@@ -285,17 +285,184 @@ style.textContent = `
 `
 document.head.appendChild(style)
 
+// Quote animation function
+function showQuoteAnimation(card) {
+  card.classList.add('clicked');
+  setTimeout(() => card.classList.remove('clicked'), 600);
+  createSparkles(card);
+  
+  // Create floating hearts around the quote
+  const hearts = ['💕', '💖', '💗', '💝'];
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => {
+      const heart = document.createElement('div');
+      heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+      heart.style.position = 'fixed';
+      heart.style.left = card.getBoundingClientRect().left + Math.random() * card.offsetWidth + 'px';
+      heart.style.top = card.getBoundingClientRect().top + 'px';
+      heart.style.fontSize = '20px';
+      heart.style.pointerEvents = 'none';
+      heart.style.zIndex = '9999';
+      heart.style.animation = 'floatUp 2s ease-out forwards';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 2000);
+    }, i * 100);
+  }
+}
+
+// Page transition effects
+function initPageTransitions() {
+  document.querySelectorAll('a:not([target="_blank"])').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href && href.includes('.html')) {
+        e.preventDefault();
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+          window.location.href = href;
+        }, 300);
+      }
+    });
+  });
+}
+
+// Enhanced localStorage management
+const Storage = {
+  get(key, defaultValue = null) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  },
+  set(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  remove(key) {
+    localStorage.removeItem(key);
+  }
+};
+
+// Visit counter
+function trackVisit() {
+  const visits = Storage.get('visits', 0) + 1;
+  Storage.set('visits', visits);
+  Storage.set('lastVisit', new Date().toISOString());
+  return visits;
+}
+
+// Confetti effect
+function createConfetti() {
+  const colors = ['#f43f5e', '#fb7185', '#fda4af', '#fecdd3'];
+  for (let i = 0; i < 50; i++) {
+    setTimeout(() => {
+      const confetti = document.createElement('div');
+      confetti.style.position = 'fixed';
+      confetti.style.left = Math.random() * window.innerWidth + 'px';
+      confetti.style.top = '-20px';
+      confetti.style.width = '10px';
+      confetti.style.height = '10px';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.pointerEvents = 'none';
+      confetti.style.zIndex = '9999';
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      confetti.style.animation = `fall ${2 + Math.random() * 2}s linear forwards`;
+      confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 4000);
+    }, i * 30);
+  }
+}
+
+// Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('💕 ServiceWorker registered:', registration.scope);
+      })
+      .catch(err => {
+        console.log('ServiceWorker registration failed:', err);
+      });
+  });
+}
+
+// PWA Install Prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // You can show a custom install button here if desired
+  console.log('💕 PWA Install available');
+});
+
+// Dark Mode Toggle
+function initDarkMode() {
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  
+  // Apply saved theme
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  updateThemeIcon(savedTheme);
+  
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+      
+      // Add celebration effect
+      createSparkles(themeToggle);
+    });
+  }
+}
+
+function updateThemeIcon(theme) {
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    themeToggle.title = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+  }
+}
+
+// Make functions globally available
+window.showQuoteAnimation = showQuoteAnimation;
+window.createConfetti = createConfetti;
+window.initDarkMode = initDarkMode;
+
 document.addEventListener("DOMContentLoaded", () => {
+  initDarkMode()
   updateDailyMessage()
   animateLoveMeter()
   initSweetTooltips()
   createFloatingHearts()
+  initPageTransitions()
+
+  // Track visit
+  const visitCount = trackVisit();
+  console.log(`💕 Visit #${visitCount}`);
 
   // Update love count display
-  document.getElementById("love-count").textContent = loveCount
+  const loveCountEl = document.getElementById("love-count");
+  if (loveCountEl) {
+    loveCountEl.textContent = loveCount;
+  }
 
   // Add music toggle event
-  document.getElementById("music-toggle").addEventListener("click", toggleMusic)
+  const musicToggle = document.getElementById("music-toggle");
+  if (musicToggle) {
+    musicToggle.addEventListener("click", toggleMusic);
+  }
 
   // Make sendLove globally available
   window.sendLove = sendLove

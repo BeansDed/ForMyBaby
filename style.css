@@ -12,6 +12,7 @@
   --white: #ffffff;
   --cream: #fffaf0;
   --bg: #fff9fb;
+  --text-dark: #3b3b3b;
   --font-sans: "Inter", system-ui, Arial;
   --font-serif: "Playfair Display", serif;
   --font-display: "Playfair Display", serif;
@@ -19,6 +20,50 @@
   --shadow-soft: 0 6px 24px rgba(244, 63, 94, 0.1);
   --shadow-medium: 0 10px 30px rgba(244, 63, 94, 0.18);
   --card-radius: 1.5rem;
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"] {
+  --rose-50: #4a1520;
+  --rose-100: #5a1828;
+  --rose-200: #7a2030;
+  --white: #1a1a1a;
+  --cream: #252525;
+  --bg: #0f0a0c;
+  --text-dark: #e5e5e5;
+  --mauve: #a8a8a8;
+  --shadow-soft: 0 6px 24px rgba(244, 63, 94, 0.2);
+  --shadow-medium: 0 10px 30px rgba(244, 63, 94, 0.3);
+}
+
+/* Dark Mode Toggle Button */
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: var(--rose-500);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: var(--shadow-medium);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 8px 32px rgba(244, 63, 94, 0.4);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
 }
 
 /* ========= Base layout ========= */
@@ -34,10 +79,11 @@ body {
   font-family: var(--font-sans);
   background: radial-gradient(1200px 800px at 10% -10%, #ffeef3 0%, transparent 60%),
     radial-gradient(1000px 700px at 100% 0%, #fff5f7 0%, transparent 60%), var(--bg);
-  color: #3b3b3b;
+  color: var(--text-dark);
   line-height: 1.55;
   overflow-x: hidden;
   opacity: 1; /* JS fades this in on load */
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Lace / subtle pattern overlay */
@@ -1074,5 +1120,279 @@ body {
 
   .intro {
     font-size: 15px;
+  }
+}
+
+/* ========= LOVE QUOTES (love-quotes.html) ========= */
+.quotes-container {
+  display: grid;
+  gap: clamp(16px, 4vw, 20px);
+  margin: clamp(16px, 4vw, 20px) 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+}
+
+.quote-card {
+  position: relative;
+  background: linear-gradient(145deg, var(--white), var(--cream));
+  border: 2px solid var(--rose-200);
+  border-radius: clamp(16px, 4vw, 20px);
+  padding: clamp(20px, 5vw, 28px);
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.quote-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--rose-300);
+}
+
+.quote-card.clicked {
+  animation: quoteReveal 0.6s ease;
+}
+
+@keyframes quoteReveal {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.05) rotate(1deg);
+  }
+  75% {
+    transform: scale(1.05) rotate(-1deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.quote-icon {
+  font-size: clamp(32px, 8vw, 42px);
+  margin-bottom: clamp(12px, 3vw, 16px);
+  animation: floatQuoteIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatQuoteIcon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.quote-text {
+  font-family: var(--font-serif);
+  font-size: clamp(16px, 4vw, 19px);
+  line-height: 1.6;
+  color: var(--rose-700);
+  font-style: italic;
+  margin: clamp(12px, 3vw, 16px) 0;
+  min-height: clamp(60px, 15vw, 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote-author {
+  font-size: clamp(13px, 3vw, 15px);
+  color: var(--mauve);
+  font-weight: 600;
+  margin-top: clamp(12px, 3vw, 16px);
+  font-family: var(--font-sans);
+}
+
+/* ========= COMPLIMENTS (compliments.html) ========= */
+.compliment-generator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 5vw, 28px);
+  margin: clamp(24px, 6vw, 32px) 0;
+  padding: clamp(20px, 5vw, 28px);
+  background: linear-gradient(145deg, var(--rose-50), var(--rose-100));
+  border-radius: clamp(16px, 4vw, 24px);
+  border: 2px solid var(--rose-200);
+}
+
+.compliment-card {
+  background: var(--white);
+  border: 2px solid var(--rose-300);
+  border-radius: clamp(16px, 4vw, 20px);
+  padding: clamp(24px, 6vw, 36px);
+  text-align: center;
+  box-shadow: var(--shadow-medium);
+  min-height: clamp(150px, 30vw, 200px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 3vw, 16px);
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  overflow: hidden;
+}
+
+.compliment-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.compliment-card:hover::before {
+  transform: translateX(100%);
+}
+
+.compliment-icon {
+  font-size: clamp(36px, 9vw, 48px);
+  animation: spinGlow 4s ease-in-out infinite;
+}
+
+@keyframes spinGlow {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+    filter: drop-shadow(0 0 8px rgba(244, 63, 94, 0.3));
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+    filter: drop-shadow(0 0 16px rgba(244, 63, 94, 0.6));
+  }
+}
+
+.compliment-text {
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 4.5vw, 21px);
+  line-height: 1.6;
+  color: var(--rose-700);
+  font-style: italic;
+  margin: 0;
+  font-weight: 500;
+}
+
+.compliments-history {
+  margin-top: clamp(28px, 7vw, 36px);
+  padding: clamp(20px, 5vw, 28px);
+  background: var(--white);
+  border: 2px solid var(--rose-200);
+  border-radius: clamp(16px, 4vw, 20px);
+  box-shadow: var(--shadow-soft);
+}
+
+.compliments-history h3 {
+  color: var(--rose-600);
+  font-family: var(--font-display);
+  text-align: center;
+  margin: 0 0 clamp(16px, 4vw, 20px);
+  font-size: clamp(18px, 4.5vw, 22px);
+}
+
+.compliments-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2.5vw, 12px);
+}
+
+.compliment-history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: linear-gradient(145deg, var(--rose-50), var(--rose-100));
+  border: 1px solid var(--rose-200);
+  border-radius: clamp(10px, 2.5vw, 12px);
+  padding: clamp(12px, 3vw, 14px);
+  animation: slideInCompliment 0.4s ease;
+}
+
+@keyframes slideInCompliment {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.compliment-time {
+  font-size: clamp(11px, 2.5vw, 12px);
+  color: var(--mauve);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.compliment-content {
+  font-size: clamp(14px, 3.5vw, 16px);
+  color: var(--rose-700);
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* ========= ENHANCED PLAYLIST STYLES ========= */
+.playlist-back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: var(--rose-500);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-medium);
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.playlist-back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(244, 63, 94, 0.3);
+}
+
+/* ========= ADDITIONAL ANIMATIONS ========= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page {
+  animation: fadeInUp 0.6s ease;
+}
+
+/* ========= ENHANCED INTERACTIVE ELEMENTS ========= */
+.love-button:hover {
+  animation: pulse 0.8s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
   }
 }

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f43f5e">
+  <title>Our Love Timeline ♡</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--rose-200), var(--rose-400));
+      border-radius: 2px;
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: clamp(40px, 10vw, 60px);
+      display: flex;
+      align-items: center;
+      animation: fadeInUp 0.6s ease backwards;
+    }
+    
+    .timeline-item:nth-child(odd) {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    
+    .timeline-item:nth-child(even) {
+      animation-delay: 0.1s;
+    }
+    
+    .timeline-content {
+      background: linear-gradient(145deg, var(--white), var(--cream));
+      border: 2px solid var(--rose-200);
+      border-radius: clamp(16px, 4vw, 20px);
+      padding: clamp(16px, 4vw, 24px);
+      box-shadow: var(--shadow-soft);
+      width: calc(50% - 40px);
+      transition: all 0.3s ease;
+    }
+    
+    .timeline-content:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-medium);
+      border-color: var(--rose-300);
+    }
+    
+    .timeline-icon {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(50px, 12vw, 70px);
+      height: clamp(50px, 12vw, 70px);
+      background: linear-gradient(145deg, var(--rose-400), var(--rose-500));
+      border: 4px solid var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(20px, 5vw, 28px);
+      box-shadow: var(--shadow-medium);
+      z-index: 2;
+      animation: heartBeat 2s ease-in-out infinite;
+    }
+    
+    .timeline-date {
+      color: var(--rose-600);
+      font-weight: 700;
+      font-family: var(--font-display);
+      margin-bottom: 8px;
+      font-size: clamp(14px, 3.5vw, 16px);
+    }
+    
+    .timeline-title {
+      color: var(--rose-700);
+      font-family: var(--font-serif);
+      font-size: clamp(16px, 4vw, 20px);
+      margin: 8px 0;
+      font-weight: 600;
+    }
+    
+    .timeline-description {
+      color: var(--mauve);
+      font-size: clamp(14px, 3.5vw, 16px);
+      line-height: 1.6;
+      margin: 8px 0 0;
+    }
+    
+    @media (max-width: 768px) {
+      .timeline::before {
+        left: 20px;
+      }
+      
+      .timeline-item {
+        flex-direction: row !important;
+        text-align: left !important;
+      }
+      
+      .timeline-content {
+        width: calc(100% - 80px);
+        margin-left: 60px;
+      }
+      
+      .timeline-icon {
+        left: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lace-overlay"></div>
+  <div class="floating-hearts" aria-hidden="true"></div>
+  
+  <div class="container">
+    <div class="page">
+      <div class="topbar">
+        <a href="index.html" class="back-link">← Back to Home</a>
+      </div>
+      
+      <div class="sparkles" aria-hidden="true">
+        <span class="sparkle">✧</span>
+        <span class="sparkle">✦</span>
+        <span class="sparkle">✧</span>
+      </div>
+      
+      <h1 class="page-title">Our Love Timeline</h1>
+      <div class="heart-divider">♡</div>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">August 3, 2025</div>
+            <h3 class="timeline-title">The Day We Met</h3>
+            <p class="timeline-description">The universe aligned and brought us together. Little did I know, my life was about to change forever.</p>
+          </div>
+          <div class="timeline-icon">💫</div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">First Week Together</div>
+            <h3 class="timeline-title">First Date</h3>
+            <p class="timeline-description">Our first date was magical. Time flew by as we talked for hours, and I knew you were someone special.</p>
+          </div>
+          <div class="timeline-icon">☕</div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">Our First Month</div>
+            <h3 class="timeline-title">Made It Official</h3>
+            <p class="timeline-description">The day you said yes to being mine. My heart has belonged to you ever since.</p>
+          </div>
+          <div class="timeline-icon">💕</div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">Special Moments</div>
+            <h3 class="timeline-title">Our First Trip</h3>
+            <p class="timeline-description">Adventures together, creating memories that will last a lifetime. Every moment with you is an adventure.</p>
+          </div>
+          <div class="timeline-icon">✈️</div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">Today & Beyond</div>
+            <h3 class="timeline-title">Every Day Together</h3>
+            <p class="timeline-description">Each day brings new reasons to love you more. Here's to our forever, one beautiful day at a time.</p>
+          </div>
+          <div class="timeline-icon">💖</div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-date">Forever</div>
+            <h3 class="timeline-title">Our Future</h3>
+            <p class="timeline-description">This is just the beginning. So many more chapters of our love story are yet to be written.</p>
+          </div>
+          <div class="timeline-icon">∞</div>
+        </div>
+      </div>
+      
+      <div class="love-message">
+        <div class="bow-accent">📅</div>
+        <p class="message-text">Every moment with you becomes a cherished memory in our beautiful story ♡</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

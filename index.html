@@ -4,13 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f43f5e">
+  <meta name="description" content="A romantic website filled with love, memories, and endless affection">
+  <meta name="author" content="Your Love">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="For You ♡ - A Love Website">
+  <meta property="og:description" content="A special place filled with all my love for you">
+  <meta property="og:image" content="https://yourdomain.com/og-image.png">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="For You ♡">
+  <meta property="twitter:description" content="A special place filled with all my love for you">
+  
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="favicon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="For Baby ♡">
+  
   <title>For You ♡</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="config.js"></script>
 </head>
 <body>
   <div class="lace-overlay"></div>
   <div class="floating-hearts" aria-hidden="true"></div>
+  
+  <!-- Dark Mode Toggle -->
+  <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+    🌙
+  </button>
   
   <!-- Added sweet music player -->
   <div class="music-player">
@@ -104,6 +133,42 @@
         <a href="playlist.html" class="heart-card" data-sweet-message="Songs that remind me of you">
           <div class="heart-icon">🎶</div>
           <span class="heart-label">Our Playlist</span>
+          <div class="heart-shimmer"></div>
+        </a>
+
+        <a href="timeline.html" class="heart-card" data-sweet-message="Our beautiful journey timeline">
+          <div class="heart-icon">📅</div>
+          <span class="heart-label">Love Timeline</span>
+          <div class="heart-shimmer"></div>
+        </a>
+
+        <a href="quiz.html" class="heart-card" data-sweet-message="Test how well you know me!">
+          <div class="heart-icon">🎯</div>
+          <span class="heart-label">Love Quiz</span>
+          <div class="heart-shimmer"></div>
+        </a>
+
+        <a href="bucketlist.html" class="heart-card" data-sweet-message="Dreams we'll achieve together">
+          <div class="heart-icon">✨</div>
+          <span class="heart-label">Bucket List</span>
+          <div class="heart-shimmer"></div>
+        </a>
+
+        <a href="love-quotes.html" class="heart-card" data-sweet-message="Beautiful words about us">
+          <div class="heart-icon">📖</div>
+          <span class="heart-label">Love Quotes</span>
+          <div class="heart-shimmer"></div>
+        </a>
+
+        <a href="openwhen.html" class="heart-card" data-sweet-message="Letters for special moments">
+          <div class="heart-icon">💌</div>
+          <span class="heart-label">Open When...</span>
+          <div class="heart-shimmer"></div>
+        </a>
+
+        <a href="gallery-manager.html" class="heart-card" data-sweet-message="Manage your photo gallery">
+          <div class="heart-icon">🖼️</div>
+          <span class="heart-label">Gallery Manager</span>
           <div class="heart-shimmer"></div>
         </a>
       </div>
