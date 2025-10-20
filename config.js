@@ -6,10 +6,10 @@
 const CONFIG = {
   // Personal Information
   relationship: {
-    startDate: "2025-08-03", // Format: YYYY-MM-DD
-    partnerName: "My Baby",
-    yourName: "Your Love",
-    petName: "baby", // What you call each other
+    startDate: "2025-08-03", // Format: YYYY-MM-DD - Change this to your actual relationship start date
+    partnerName: "My Love", // Your girlfriend's name
+    yourName: "Your Boyfriend", // Your name
+    petName: "baby", // What you call her
   },
 
   // Music Player
@@ -116,4 +116,5 @@ if (CONFIG.theme) {
   document.documentElement.style.setProperty('--rose-400', CONFIG.theme.secondaryColor);
   document.documentElement.style.setProperty('--bg', CONFIG.theme.backgroundColor);
 }
+
 

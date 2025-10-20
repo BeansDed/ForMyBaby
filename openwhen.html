@@ -234,77 +234,7 @@
         For those moments when you need a little extra love. Click on any letter when the time feels right. 💕
       </p>
       
-      <div class="letters-grid">
-        <div class="letter-envelope" onclick="openLetter(this, 'miss')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">💌</div>
-          <div class="letter-title">Open When You Miss Me</div>
-          <div class="letter-preview">For when distance feels too far</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'sad')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">🤗</div>
-          <div class="letter-title">Open When You're Sad</div>
-          <div class="letter-preview">To bring sunshine to your day</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'happy')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">🎉</div>
-          <div class="letter-title">Open When You're Happy</div>
-          <div class="letter-preview">To celebrate your joy with you</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'stressed')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">🌸</div>
-          <div class="letter-title">Open When You're Stressed</div>
-          <div class="letter-preview">A reminder to breathe and relax</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'morning')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">☀️</div>
-          <div class="letter-title">Open in the Morning</div>
-          <div class="letter-preview">Start your day with love</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'night')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">🌙</div>
-          <div class="letter-title">Open at Night</div>
-          <div class="letter-preview">Sweet dreams, my love</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'success')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">🏆</div>
-          <div class="letter-title">Open When You Succeed</div>
-          <div class="letter-preview">I'm so proud of you!</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'doubt')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">💪</div>
-          <div class="letter-title">Open When You Doubt Yourself</div>
-          <div class="letter-preview">Believe in yourself like I do</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'birthday')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">🎂</div>
-          <div class="letter-title">Open on Your Birthday</div>
-          <div class="letter-preview">Celebrating you today!</div>
-        </div>
-        
-        <div class="letter-envelope" onclick="openLetter(this, 'random')">
-          <span class="opened-badge">✓ Read</span>
-          <div class="envelope-icon">✨</div>
-          <div class="letter-title">Open When You Need a Smile</div>
-          <div class="letter-preview">Just because I love you</div>
-        </div>
-      </div>
+      <div class="letters-grid" id="lettersGrid"></div>
       
       <div class="love-message">
         <div class="bow-accent">💝</div>
@@ -321,9 +251,10 @@
     </div>
   </div>
 
+  <script src="api-helper.js"></script>
   <script src="script.js"></script>
   <script>
-    const letters = {
+    const presetLetters = {
       miss: {
         emoji: '💕',
         title: 'When You Miss Me',
@@ -457,9 +388,9 @@
       }
     };
     
-    function openLetter(element, letterId) {
+    function openLetter(element, data) {
       element.classList.add('opened');
-      const letter = letters[letterId];
+      const letter = data;
       
       const modal = document.getElementById('letterModal');
       const body = document.getElementById('letterBody');
@@ -482,7 +413,7 @@
       document.body.style.overflow = 'hidden';
       
       // Save opened state
-      saveLetterState(letterId);
+      if (letter._id) API.markLetterOpened(letter._id).catch(()=>{});
       createConfetti();
     }
     
@@ -494,23 +425,20 @@
       }
     }
     
-    function saveLetterState(letterId) {
-      const opened = JSON.parse(localStorage.getItem('openedLetters') || '[]');
-      if (!opened.includes(letterId)) {
-        opened.push(letterId);
-        localStorage.setItem('openedLetters', JSON.stringify(opened));
-      }
-    }
-    
-    function loadLetterStates() {
-      const opened = JSON.parse(localStorage.getItem('openedLetters') || '[]');
-      const envelopes = document.querySelectorAll('.letter-envelope');
-      const letterIds = Object.keys(letters);
-      
-      envelopes.forEach((envelope, index) => {
-        if (opened.includes(letterIds[index])) {
-          envelope.classList.add('opened');
-        }
+    function renderLetters(data) {
+      const grid = document.getElementById('lettersGrid');
+      grid.innerHTML = '';
+      const letters = data.length ? data : Object.keys(presetLetters).map(k => presetLetters[k]);
+      letters.forEach(letter => {
+        const el = document.createElement('div');
+        el.className = 'letter-envelope' + (letter.opened ? ' opened' : '');
+        el.onclick = () => openLetter(el, letter);
+        el.innerHTML = `
+          <span class="opened-badge">✓ Read</span>
+          <div class="envelope-icon">${letter.emoji || '💌'}</div>
+          <div class="letter-title">${letter.title}</div>
+          <div class="letter-preview">${(letter.content || '').slice(0, 60)}...</div>`;
+        grid.appendChild(el);
       });
     }
     
@@ -521,8 +449,19 @@
       }
     });
     
-    window.addEventListener('DOMContentLoaded', loadLetterStates);
+    async function loadLetters() {
+      try {
+        const letters = await API.getOpenWhenLetters();
+        renderLetters(letters);
+      } catch (e) {
+        console.log('Failed to load letters, using preset', e);
+        renderLetters([]);
+      }
+    }
+    window.addEventListener('DOMContentLoaded', loadLetters);
   </script>
 </body>
 </html>
+
+
 

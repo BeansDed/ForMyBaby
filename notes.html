@@ -25,24 +25,7 @@
       <h1 class="page-title">Sweet Notes for You</h1>
       <div class="heart-divider">♡</div>
       
-      <ul class="notes-list">
-        <li>Good morning, beautiful! I hope your day is as amazing as you are ☀️</li>
-        <li>Just thinking about you and smiling like an idiot 😊</li>
-        <li>You make my heart skip a beat every single time I see you</li>
-        <li>Can't wait to hold you in my arms again 🤗</li>
-        <li>You're the first thing I think about when I wake up and the last before I sleep</li>
-        <li>Your laugh is my favorite sound in the whole world</li>
-        <li>I'm so grateful the universe brought us together</li>
-        <li>You make even Monday mornings feel magical</li>
-        <li>Missing you already and you just left 5 minutes ago</li>
-        <li>You're not just my love, you're my best friend too</li>
-        <li>Thank you for being patient with me when I'm being silly</li>
-        <li>I love how you make everything an adventure</li>
-        <li>Your hugs are better than any medicine</li>
-        <li>I'm the luckiest person in the world to call you mine</li>
-        <li>You inspire me to be better every single day</li>
-        <li>Sweet dreams, my love. See you in my dreams tonight 🌙</li>
-      </ul>
+      <ul class="notes-list" id="notesList"></ul>
       
       <div class="love-message">
         <div class="bow-accent">📝</div>
@@ -51,6 +34,24 @@
     </div>
   </div>
 
+  <script src="api-helper.js"></script>
   <script src="script.js"></script>
+  <script>
+    async function loadNotes() {
+      try {
+        const notes = await API.getNotes();
+        const list = document.getElementById('notesList');
+        list.innerHTML = '';
+        notes.forEach(n => {
+          const li = document.createElement('li');
+          li.textContent = `${n.emoji || '💗'}  ${n.content}`;
+          list.appendChild(li);
+        });
+      } catch (e) {
+        console.log('Failed to load notes', e);
+      }
+    }
+    window.addEventListener('DOMContentLoaded', loadNotes);
+  </script>
 </body>
 </html>

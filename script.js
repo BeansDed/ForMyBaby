@@ -164,6 +164,32 @@ function updateDailyMessage() {
   }
 }
 
+// Time-based greeting and share
+function updateGreeting() {
+  const el = document.getElementById('greeting');
+  if (!el) return;
+  const h = new Date().getHours();
+  const part = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+  el.textContent = `${part}, My Love! 💕`;
+}
+
+async function sharePage() {
+  const text = 'I made this little love website for you 💖';
+  const url = window.location.origin;
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'For You ♡', text, url });
+    } else {
+      await navigator.clipboard.writeText(url);
+      const btn = document.getElementById('share-btn');
+      if (btn) {
+        const prev = btn.textContent; btn.textContent = 'Link Copied ✅';
+        setTimeout(() => (btn.textContent = prev), 1500);
+      }
+    }
+  } catch {}
+}
+
 function animateLoveMeter() {
   const loveFill = document.getElementById("love-fill")
   if (loveFill) {
@@ -206,6 +232,11 @@ function sendLove() {
 
   // Create love explosion
   createLoveExplosion()
+
+  // Milestone confetti
+  if ([10, 25, 50, 100].includes(loveCount)) {
+    createConfetti()
+  }
 }
 
 function createLoveExplosion() {
@@ -387,6 +418,29 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
       .then(registration => {
         console.log('💕 ServiceWorker registered:', registration.scope);
+
+        // PWA update prompt
+        function showUpdateToast() {
+          const toast = document.createElement('div');
+          toast.textContent = 'New version available — Refresh';
+          toast.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#ecfeff;color:#0e7490;padding:10px 14px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:10000;cursor:pointer;';
+          document.body.appendChild(toast);
+          toast.onclick = () => location.reload();
+          setTimeout(() => toast.remove(), 6000);
+        }
+
+        if (registration.waiting) {
+          showUpdateToast();
+        }
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateToast();
+            }
+          });
+        });
       })
       .catch(err => {
         console.log('ServiceWorker registration failed:', err);
@@ -406,7 +460,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 // Dark Mode Toggle
 function initDarkMode() {
   const themeToggle = document.getElementById('theme-toggle');
-  const savedTheme = localStorage.getItem('theme') || 'light';
+  const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   
   // Apply saved theme
   document.documentElement.setAttribute('data-theme', savedTheme);
@@ -443,6 +497,7 @@ window.initDarkMode = initDarkMode;
 document.addEventListener("DOMContentLoaded", () => {
   initDarkMode()
   updateDailyMessage()
+  updateGreeting()
   animateLoveMeter()
   initSweetTooltips()
   createFloatingHearts()
@@ -464,9 +519,22 @@ document.addEventListener("DOMContentLoaded", () => {
     musicToggle.addEventListener("click", toggleMusic);
   }
 
+  const shareBtn = document.getElementById('share-btn');
+  if (shareBtn) shareBtn.addEventListener('click', sharePage);
+
   // Make sendLove globally available
   window.sendLove = sendLove
 
   const cards = document.querySelectorAll(".heart-card, .celebration-card")
   cards.forEach((card) => card.addEventListener("mouseenter", () => createSparkles(card)))
 })
+
+// Offline banner
+window.addEventListener('online', () => {
+  const b = document.getElementById('offline-banner');
+  if (b) b.style.display = 'none';
+});
+window.addEventListener('offline', () => {
+  const b = document.getElementById('offline-banner');
+  if (b) b.style.display = 'block';
+});

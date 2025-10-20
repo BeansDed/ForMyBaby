@@ -25,17 +25,7 @@
       <h1 class="page-title">Our Beautiful Memories</h1>
       <div class="heart-divider">♡</div>
       
-      <div class="gallery">
-        <img src="/placeholder.svg?height=200&width=200" alt="Our first date at the coffee shop">
-        <img src="/placeholder.svg?height=200&width=200" alt="Watching the sunset together">
-        <img src="/placeholder.svg?height=200&width=200" alt="Our perfect picnic day">
-        <img src="/placeholder.svg?height=200&width=200" alt="Dancing in the kitchen">
-        <img src="/placeholder.svg?height=200&width=200" alt="Stargazing on that magical night">
-        <img src="/placeholder.svg?height=200&width=200" alt="Walking on the beach hand in hand">
-        <img src="/placeholder.svg?height=200&width=200" alt="Our cozy movie nights">
-        <img src="/placeholder.svg?height=200&width=200" alt="Celebrating our anniversary">
-        <img src="/placeholder.svg?height=200&width=200" alt="Our hiking adventure">
-      </div>
+      <div class="gallery" id="memoriesGrid"></div>
       
   
       
@@ -46,6 +36,31 @@
     </div>
   </div>
 
+  <script src="api-helper.js"></script>
   <script src="script.js"></script>
+  <script>
+    function renderMemories(items) {
+      const grid = document.getElementById('memoriesGrid');
+      grid.innerHTML = '';
+      items.forEach(m => {
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = m.title || 'Our memory';
+        img.src = m.imageUrl || '/placeholder.svg?height=200&width=200';
+        img.title = m.description || '';
+        grid.appendChild(img);
+      });
+    }
+
+    async function loadMemories() {
+      try {
+        const data = await API.getMemories();
+        renderMemories(data);
+      } catch (e) {
+        console.log('Failed to load memories', e);
+      }
+    }
+    window.addEventListener('DOMContentLoaded', loadMemories);
+  </script>
 </body>
 </html>

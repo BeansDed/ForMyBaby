@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forbaby-v1';
+const CACHE_NAME = 'forbaby-v2';
 const urlsToCache = [
   '/index.html',
   '/style.css',
@@ -85,4 +85,5 @@ self.addEventListener('activate', event => {
   );
   return self.clients.claim();
 });
+
 

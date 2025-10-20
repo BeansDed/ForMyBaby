@@ -28,6 +28,8 @@
   <meta name="apple-mobile-web-app-title" content="For Baby ♡">
   
   <title>For You ♡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="config.js"></script>
@@ -67,9 +69,9 @@
         <p class="daily-text">Loading your daily love message...</p>
       </div>
       
-      <h1 class="main-title">Hi, My baby!</h1>
+      <h1 class="main-title" id="greeting">Hi, My Love! 💕</h1>
       <div class="heart-divider">♡</div>
-      <p class="intro">I created this enchanted space filled with all my love for you. Each charm holds a piece of my heart ✨</p>
+      <p class="intro">I created this special place just for you, filled with all my love. Every page here is a piece of my heart ✨</p>
 
       <!-- Added love meter -->
       <div class="love-meter">
@@ -166,17 +168,15 @@
           <div class="heart-shimmer"></div>
         </a>
 
-        <a href="gallery-manager.html" class="heart-card" data-sweet-message="Manage your photo gallery">
-          <div class="heart-icon">🖼️</div>
-          <span class="heart-label">Gallery Manager</span>
-          <div class="heart-shimmer"></div>
-        </a>
-      </div>
+    </div>
 
       <!-- Added interactive love button -->
       <div class="interactive-section">
         <button class="love-button" id="send-love" onclick="sendLove()">
           Send Me Your Love 💕
+        </button>
+        <button class="love-button" id="share-btn" style="margin-left: 8px;" title="Share this with me">
+          Share This 💌
         </button>
         <div class="love-counter">
           <span>Love received today: </span>
@@ -187,7 +187,7 @@
 
       <div class="love-message">
         <div class="bow-accent">🎀</div>
-        <p class="message-text">Every pixel, every word, every detail was crafted with endless love just for you, my darling ♡</p>
+        <p class="message-text">I made this entire website just for you, my love. Every word, every memory, every detail is to show you how much you mean to me ♡</p>
       </div>
     </div>
   </div>
@@ -195,6 +195,47 @@
   <!-- Added sweet tooltip for hover messages -->
   <div id="sweet-tooltip" class="sweet-tooltip"></div>
 
-  <script src="script.js"></script>
+  <div id="offline-banner" style="display:none; position:fixed; bottom:12px; left:50%; transform:translateX(-50%); background:#fee2e2; color:#991b1b; padding:8px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); z-index:9999;">You're offline. Some content may be cached.</div>
+
+  <script src="api-helper.js" defer></script>
+  <script src="script.js" defer></script>
+  <script>
+    // Load love count from backend on page load
+    window.addEventListener('load', async () => {
+      try {
+        const data = await API.getLoveCount();
+        if (data && data.count !== undefined) {
+          loveCount = data.count;
+          const loveCountEl = document.getElementById('love-count');
+          if (loveCountEl) {
+            loveCountEl.textContent = loveCount;
+          }
+        }
+      } catch (error) {
+        console.log('Could not load love count from server:', error);
+      }
+    });
+
+    // Override sendLove to use backend
+    const originalSendLove = window.sendLove;
+    window.sendLove = async function() {
+      try {
+        const data = await API.incrementLoveCount();
+        if (data && data.count !== undefined) {
+          loveCount = data.count;
+          document.getElementById('love-count').textContent = loveCount;
+          document.getElementById('love-count').style.animation = 'none';
+          setTimeout(() => {
+            document.getElementById('love-count').style.animation = 'countGlow 1s ease';
+          }, 10);
+          createLoveExplosion();
+        }
+      } catch (error) {
+        console.log('Could not increment love count on server:', error);
+        // Fallback to local storage
+        if (originalSendLove) originalSendLove();
+      }
+    };
+  </script>
 </body>
 </html>
