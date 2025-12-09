@@ -1,0 +1,6 @@
+@echo off
+echo Starting For My Baby...
+echo.
+echo Starting Backend and Frontend servers...
+npm start
+pause
