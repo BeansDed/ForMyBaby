@@ -1,0 +1,242 @@
+/* UI Elements */
+.pulsing-heart-btn {
+    background: linear-gradient(135deg, rgba(155, 17, 30, 0.2), rgba(155, 17, 30, 0.1));
+    border: 2px solid var(--color-pink);
+    color: var(--color-pink);
+    padding: 1rem 3rem;
+    font-size: 1.3rem;
+    font-family: var(--font-header);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s var(--transition-smooth);
+    animation: pulse 2s infinite;
+    position: relative;
+    overflow: hidden;
+    margin-top: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.pulsing-heart-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 209, 220, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.pulsing-heart-btn:hover::before {
+    left: 100%;
+}
+
+.pulsing-heart-btn:hover {
+    background: linear-gradient(135deg, var(--color-pink), rgba(255, 209, 220, 0.8));
+    color: #1a0a10;
+    transform: scale(1.05);
+    box-shadow: 0 10px 40px rgba(255, 209, 220, 0.4);
+}
+
+.minigame-btn {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 209, 220, 0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(255, 209, 220, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 209, 220, 0); }
+}
+
+@keyframes auroraShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes glowPulse {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.3;
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.5;
+    }
+}
+
+@keyframes lockWiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
+@keyframes floatUp {
+    0% { 
+        opacity: 1; 
+        transform: translateY(0) translateX(var(--tx, 0)) scale(1); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: translateY(-120px) translateX(var(--tx, 0)) scale(1.5) rotate(20deg); 
+    }
+}
+
+.floating-heart {
+    position: fixed;
+    font-size: 1.5rem;
+    color: var(--color-pink);
+    pointer-events: none;
+    animation: floatUp 1.5s ease-out forwards;
+    z-index: 9999;
+    text-shadow: 0 0 10px rgba(255, 209, 220, 0.5);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes musicBar {
+    0% { height: 5px; }
+    100% { height: 20px; }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.1); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.1); }
+    70% { transform: scale(1); }
+}
+
+@keyframes heartFloat {
+    0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(calc(100% + 100px)) rotate(var(--heart-rotate, 15deg));
+        opacity: 0.8;
+    }
+}
+
+@keyframes heartCaught {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes particleFloat {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.particle {
+    position: absolute;
+    pointer-events: none;
+    animation: particleFloat var(--duration, 15s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    opacity: 0;
+    font-size: var(--size, 1rem);
+}
+
+/* Unlock Success Animation */
+@keyframes unlockSuccess {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 60px rgba(212, 175, 55, 0.5);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.locked-diary.unlocking {
+    animation: unlockSuccess 0.6s ease-out;
+}
+
+/* Shake Animation for Wrong Code */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Polaroid Entry Animation */
+@keyframes polaroidEnter {
+    0% {
+        opacity: 0;
+        transform: rotate(var(--rotation, 0deg)) translateY(50px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(var(--rotation, 0deg)) translateY(var(--offset-y, 0px)) scale(1);
+    }
+}
+
+.polaroid {
+    animation: polaroidEnter 0.6s ease-out backwards;
+}
+
+.polaroid:nth-child(1) { animation-delay: 0.1s; }
+.polaroid:nth-child(2) { animation-delay: 0.2s; }
+.polaroid:nth-child(3) { animation-delay: 0.3s; }
+.polaroid:nth-child(4) { animation-delay: 0.4s; }
+.polaroid:nth-child(5) { animation-delay: 0.5s; }
+.polaroid:nth-child(6) { animation-delay: 0.6s; }
+
+/* Success Message */
+.success-burst {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem;
+    animation: successBurst 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+@keyframes successBurst {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}
